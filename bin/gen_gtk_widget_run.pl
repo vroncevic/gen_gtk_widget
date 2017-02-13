@@ -64,7 +64,7 @@ exit(127);
 
 __END__
 
-############################ POD gengtkwidget.pl ###############################
+########################## POD gen_gtk_widget_run.pl ###########################
 
 =head1 NAME
 
@@ -146,4 +146,4 @@ Vladimir Roncevic, E<lt>elektron.ronca@gmail.comE<gt>.
 
 =cut
 
-############################ POD gengtkwidget.pl ###############################
+########################## POD gen_gtk_widget_run.pl ###########################
