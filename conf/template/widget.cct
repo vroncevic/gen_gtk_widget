@@ -1,0 +1,137 @@
+/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*-  */
+/*
+ * [% WN %].c
+ * Copyright (C) [% YR %] [% AN %] <[% AE %]>
+ * 
+ * [% PN %] is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * [% PN %] is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#include "[% WN %].h"
+
+static void gtk_[% WNLC %]_class_init([% WN %]Class *klass);
+static void gtk_[% WNLC %]_init([% WN %] *[% WNLC %]);
+static void gtk_[% WNLC %]_size_request(GtkWidget *widget, GtkRequisition *requisition);
+static void gtk_[% WNLC %]_size_allocate(GtkWidget *widget, GtkAllocation *allocation);
+static void gtk_[% WNLC %]_realize(GtkWidget *widget);
+static void gtk_[% WNLC %]_paint(GtkWidget *widget);
+static gboolean gtk_[% WNLC %]_expose(GtkWidget *widget, GdkEventExpose *event);
+
+GType gtk_[% WNLC %]_get_type() {
+	static GType [% WNLC %]_type = 0;
+	if(![% WN %]_type) {
+		static const GtkTypeInfo gtk_[% WNLC %]_info = {
+			"[% WN %]",
+			sizeof([% WN %]),
+			sizeof([% WN %]Class),
+			(GtkClassInitFunc) gtk_[% WNLC %]_class_init,
+			(GtkObjectInitFunc) gtk_[% WNLC %]_init,
+			NULL,
+			NULL,
+			(GtkClassInitFunc) NULL
+		};
+		[% WNLC %]_type = gtk_type_unique(GTK_TYPE_WIDGET, &gtk_[% WNLC %]_info);
+	}
+	return [% WNLC %]_type;
+}
+
+GtkWidget* gtk_[% WNLC %]_new() {
+	return GTK_WIDGET(gtk_type_new(gtk_[% WNLC %]_get_type()));
+}
+
+static void gtk_[% WNLC %]_class_init([% WN %]Class *klass) {
+	GtkWidgetClass *widget_class;
+	GtkObjectClass *object_class;
+	widget_class = (GtkWidgetClass *) klass;
+	object_class = (GtkObjectClass *) klass;
+	widget_class->realize = gtk_[% WNLC %]_realize;
+	widget_class->size_request = gtk_[% WNLC %]_size_request;
+	widget_class->size_allocate = gtk_[% WNLC %]_size_allocate;
+	widget_class->expose_event = gtk_[% WNLC %]_expose;
+	object_class->destroy = gtk_[% WNLC %]_destroy;
+}
+
+static void gtk_[% WNLC %]_init([% WN %] *[% WNLC %]) {
+	[% WNLC %]->slided = 0;
+}
+
+static void gtk_[% WNLC %]_size_request(GtkWidget *widget, GtkRequisition *requisition) {
+	g_return_if_fail(widget != NULL);
+	g_return_if_fail(IS_[% WNUC %](widget));
+	g_return_if_fail(requisition != NULL);
+	requisition->width = 100;
+	requisition->height = 100;
+}
+
+static void gtk_[% WNLC %]_size_allocate(GtkWidget *widget, GtkAllocation *allocation) {
+	g_return_if_fail(widget != NULL);
+	g_return_if_fail(IS_[% WNUC %](widget));
+	g_return_if_fail(allocation != NULL);
+	widget->allocation = *allocation;
+	if(GTK_WIDGET_REALIZED(widget)) {
+		gdk_window_move_resize(
+			widget->window, allocation->x, allocation->y, allocation->width, allocation->height
+		);
+	}
+}
+
+static void gtk_[% WNLC %]_realize(GtkWidget *widget) {
+	GdkWindowAttr attributes;
+	guint attributes_mask;
+	g_return_if_fail(widget != NULL);
+	g_return_if_fail(IS_[% WNUC %](widget));
+	GTK_WIDGET_SET_FLAGS(widget, GTK_REALIZED);
+	attributes.window_type = GDK_WINDOW_CHILD;
+	attributes.x = widget->allocation.x;
+	attributes.y = widget->allocation.y;
+	attributes.width = 100;
+	attributes.height = 100;
+	attributes.wclass = GDK_INPUT_OUTPUT;
+	attributes.event_mask = gtk_widget_get_events(widget) | GDK_EXPOSURE_MASK;
+	attributes_mask = GDK_WA_X | GDK_WA_Y;
+	widget->window = gdk_window_new(
+		gtk_widget_get_parent_window(widget), &attributes, attributes_mask
+	);
+	gdk_window_set_user_data(widget->window, widget);
+	widget->style = gtk_style_attach(widget->style, widget->window);
+	gtk_style_set_background(widget->style, widget->window, GTK_STATE_NORMAL);
+}
+
+static gboolean gtk_[% WNLC %]_expose(GtkWidget *widget, GdkEventExpose *event) {
+	g_return_val_if_fail(widget != NULL, FALSE);
+	g_return_val_if_fail(IS_[% WNUC %](widget), FALSE);
+	g_return_val_if_fail(event != NULL, FALSE);
+	gtk_[% WNLC %]_paint(widget);
+	return FALSE;
+}
+
+static void gtk_[% WNLC %]_paint(GtkWidget *widget) {
+	cairo_t *cr;
+	cr = gdk_cairo_create(widget->window);
+	cairo_translate(cr, 0, 7);
+	cairo_set_source_rgb(cr, 0, 0, 0);
+	cairo_paint(cr);
+	cairo_destroy(cr);
+}
+
+void gtk_[% WNLC %]_destroy(GtkObject *object) {
+	[% WN %] *mywidget;
+	[% WN %]Class *klass;
+	g_return_if_fail(object != NULL);
+	g_return_if_fail(IS_[% WNUC %](object));
+	[% WNLC %] = [% WNUC %](object);
+	klass = gtk_type_class(gtk_widget_get_type());
+	if(GTK_OBJECT_CLASS(klass)->destroy) {
+		(* GTK_OBJECT_CLASS(klass)->destroy) (object);
+	}
+}
+

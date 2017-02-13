@@ -1,0 +1,63 @@
+/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*-  */
+/*
+ * [% WN %].h
+ * Copyright (C) [% YR %] [% AN %] <[% AE %]>
+ * 
+ * [% PN %] is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * [% PN %] is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Usage example:
+ *
+ * GtkWidget *window;
+ * GtkWidget *[% WNLC %];
+ *
+ * ...
+ *
+ * [% WNLC %] = gtk_[% WNLC %]_new();
+ * gtk_container_add(GTK_CONTAINER(window), [% WNLC %]);
+ *
+ *
+ */
+#ifndef __[% WNUC %]_H
+#define __[% WNUC %]_H
+
+#include <gtk/gtk.h>
+#include <cairo.h>
+
+G_BEGIN_DECLS
+
+#define [% WNUC %]_TYPE              (gtk_[% WNLC %]_get_type())
+#define [% WNUC %](obj)              (G_TYPE_CHECK_INSTANCE_CAST((obj), [% WNUC %]_TYPE, [% WN %]))
+#define [% WNUC %]_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST((klass), [% WNUC %]_TYPE, [% WN %]Class))
+#define IS_[% WNUC %](obj)           (G_TYPE_CHECK_INSTANCE_TYPE((obj), [% WNUC %]_TYPE))
+#define IS_[% WNUC %]_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE((klass), [% WNUC %]_TYPE))
+
+typedef struct _[% WN %] [% WN %];
+typedef struct _[% WN %]Class [% WN %]Class;
+
+struct _[% WN %] {
+	GtkWidget widget;
+	guint slided;
+};
+
+struct _[% WN %]Class {
+	GtkWidgetClass parent_class;
+};
+
+GtkWidget* gtk_[% WNLC %]_new();
+void gtk_[% WNLC %]_destroy(GtkObject *object);
+
+G_END_DECLS
+
+#endif
+
