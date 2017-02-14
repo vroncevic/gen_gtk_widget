@@ -31,16 +31,24 @@ our $TOOL_DBG = "false";
 #
 # @brief   Generate GTK widget module source files
 # @param   Value required hash argument structure with parameters
-# @exitval Function gen_gtk_widget exit with integer value
-#			0   - success operation
-#			128 - check argument option structure
-#			129 - failed to read configuration file
-#			130 - check template files
+# @retval  Success 0, else 1
 #
 # @usage
 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #
-# gen_gtk_widget(\%option)
+# use GenGTKWidget qw(gen_gtk_widget);
+#
+# ...
+#
+# if(gen_gtk_widget(\%option) == $SUCCESS) {
+#	# true
+#	# notify admin | user
+# } else {
+#	# false
+#	# return $NOT_SUCCESS
+#	# or
+#	# exit 128
+# }
 #
 sub gen_gtk_widget {
 	my %opt = %{$_[0]};
@@ -97,17 +105,17 @@ sub gen_gtk_widget {
 				logging(\%log);
 				$msg = "Done";
 				info_message($msg);
-				exit(0);
+				return ($SUCCESS);
 			}
 			$msg = "Check files:\n\tCCT [$CCT]\n\tHCT [$HCT]";
 			error_message($msg);
-			exit(130);
+			return ($NOT_SUCCESS);
 		}
-		exit(129);
+		return ($NOT_SUCCESS);
 	}
 	$msg = "Missing argument [OPTION_STRUCTURE]";
 	error_message($msg);
-	exit(128);
+	return ($NOT_SUCCESS);
 }
 
 1;
@@ -123,7 +131,15 @@ GenGTKWidget - This module is for generating GTK widget module source files.
 
 	...
 
-	gen_gtk_widget(\%option);
+	if(gen_gtk_widget(\%option) == $SUCCESS) {
+		# true
+		# notify admin | user
+	} else {
+		# false
+		# return $NOT_SUCCESS
+		# or
+		# exit 128
+	}
 
 =head1 DESCRIPTION 
 
@@ -131,7 +147,7 @@ This script is for generating GTK widget module source files.
 
 =head2 EXPORT
 
-gen_gtk_widget - Success exit with code 0, else none 0
+gen_gtk_widget - return 0 for success, else 1
 
 =head1 AUTHOR
 

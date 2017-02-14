@@ -26,9 +26,10 @@ our $TOOL_DBG = "false";
 # @exitval Script tool gengtkwidget exit with integer value
 #			0   - success operation
 #			127 - run as root user
-#			128 - check argument option structure
-#			129 - failed to read configuration file
-#			130 - check template files
+#			128 - failed to:
+#				load configuration from file or
+#				load template files or
+#				missing argument(s)
 #
 my (%option, $projectName, $widgetName, $help, $man);
 
@@ -54,7 +55,10 @@ if(($username eq "root") && ($uid == 0)) {
 		if(check_status(\%status) == $SUCCESS) {
 			$option{PROJECT_NAME} = $projectName;
 			$option{WIDGET_NAME} = $widgetName;
-			gen_gtk_widget(\%option);
+			if(gen_gtk_widget(\%option) == $SUCCESS) {
+				exit(0);
+			}
+			exit(128);
 		} else {
 			pod2usage(1);
 		}
@@ -92,9 +96,10 @@ Examples:
 	# Return values
 	0   - success operation 
 	127 - run as root user
-	128 - check argument option structure
-	129 - failed to read configuration file
-	130 - check template files
+	128 - failed to:
+			load configuration from file or
+			load template files or
+			missing argument(s)
 
 =head1 DESCRIPTION
 
