@@ -40,7 +40,7 @@ our $TOOL_DBG = "false";
 #
 # ...
 #
-# if(gen_gtk_widget(\%option) == $SUCCESS) {
+# if(gen_gtk_widget(\%option)) {
 #	# true
 #	# notify admin | user
 # } else {
@@ -59,7 +59,7 @@ sub gen_gtk_widget {
 		my ($cfg, $log, %preferences);
 		$cfg = dirname(dirname(abs_path(__FILE__))) . "/conf/gengtkwidget.cfg";
 		$log = dirname(dirname(abs_path(__FILE__))) . "/log/gengtkwidget.log";
-		if(read_preference($cfg, \%preferences) == $SUCCESS) {
+		if(read_preference($cfg, \%preferences)) {
 			my ($CCT, $HCT);
 			$CCT = dirname(dirname(abs_path(__FILE__))) . "$preferences{CCT}";
 			$HCT = dirname(dirname(abs_path(__FILE__))) . "$preferences{HCT}";
@@ -131,7 +131,7 @@ GenGTKWidget - This module is for generating GTK widget module source files.
 
 	...
 
-	if(gen_gtk_widget(\%option) == $SUCCESS) {
+	if(gen_gtk_widget(\%option)) {
 		# true
 		# notify admin | user
 	} else {

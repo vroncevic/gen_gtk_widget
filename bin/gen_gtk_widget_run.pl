@@ -27,9 +27,9 @@ our $TOOL_DBG = "false";
 #			0   - success operation
 #			127 - run as root user
 #			128 - failed to:
-#				load configuration from file or
-#				load template files or
-#				missing argument(s)
+#					load configuration from file or
+#					load template files or
+#					missing argument(s)
 #
 my (%option, $projectName, $widgetName, $help, $man);
 
@@ -44,18 +44,18 @@ my $username = (getpwuid($>));
 my $uid = ($<);
 
 if(($username eq "root") && ($uid == 0)) {
-	if(def($help) == $SUCCESS) {
+	if(def($help)) {
 		pod2usage(1);
-	} elsif(def($man) == $SUCCESS) {
+	} elsif(def($man)) {
 		pod2usage(VERBOSE => 2);
 	} else {
 		my %status = (
 			projectName => def($projectName), widgetName => def($widgetName)
 		);
-		if(check_status(\%status) == $SUCCESS) {
+		if(check_status(\%status)) {
 			$option{PROJECT_NAME} = $projectName;
 			$option{WIDGET_NAME} = $widgetName;
-			if(gen_gtk_widget(\%option) == $SUCCESS) {
+			if(gen_gtk_widget(\%option)) {
 				exit(0);
 			}
 			exit(128);
