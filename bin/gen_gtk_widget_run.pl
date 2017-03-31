@@ -14,11 +14,10 @@ use Cwd qw(abs_path);
 use File::Basename qw(dirname);
 use lib dirname(dirname(abs_path(__FILE__))) . '/bin';
 use GenGTKWidget qw(gen_gtk_widget);
-use lib dirname(dirname(abs_path(__FILE__))) . '/../../lib/perl5';
+use lib '/usr/local/perl/lib/perl5';
 use CheckStatus qw(check_status);
 use Utils qw(def);
-use Status;
-our $TOOL_DBG = "false";
+use Status qw(:all);
 
 #
 # @brief   Main entry point

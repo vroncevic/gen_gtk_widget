@@ -8,25 +8,26 @@ package GenGTKWidget;
 #
 use strict;
 use warnings;
-use Exporter;
 use Sys::Hostname;
 use Template;
 use POSIX qw(strftime);
 use Cwd qw(abs_path getcwd);
 use File::Basename qw(dirname);
-use lib dirname(dirname(abs_path(__FILE__))) . '/../../lib/perl5';
+use Exporter;
+use vars qw($VERSION @ISA %EXPORT_TAGS @EXPORT_OK @EXPORT);
+$VERSION = '1.0';
+@ISA = qw(Exporter);
+@EXPORT = qw();
+%EXPORT_TAGS = ('all' => [qw(gen_gtk_widget)]);
+@EXPORT_OK = (@{$EXPORT_TAGS{'all'}});
+
+use lib '/usr/local/perl/lib/perl5';
 use InfoDebugMessage qw(info_debug_message);
 use InfoMessage qw(info_message);
 use Configuration qw(read_preference);
 use Notification qw(notify);
 use Logging qw(logging);
-use Status;
-our @ISA = qw(Exporter);
-our %EXPORT_TAGS = ('all' => [qw()]);
-our @EXPORT_OK = (@{$EXPORT_TAGS{'all'}});
-our @EXPORT = qw(gen_gtk_widget);
-our $VERSION = '1.0';
-our $TOOL_DBG = "false";
+use Status qw(:all);
 
 #
 # @brief   Generate GTK widget module source files
@@ -105,17 +106,17 @@ sub gen_gtk_widget {
 				logging(\%log);
 				$msg = "Done";
 				info_message($msg);
-				return ($SUCCESS);
+				return (SUCCESS);
 			}
 			$msg = "Check files:\n\tCCT [$CCT]\n\tHCT [$HCT]";
 			error_message($msg);
-			return ($NOT_SUCCESS);
+			return (NOT_SUCCESS);
 		}
-		return ($NOT_SUCCESS);
+		return (NOT_SUCCESS);
 	}
 	$msg = "Missing argument [OPTION_STRUCTURE]";
 	error_message($msg);
-	return ($NOT_SUCCESS);
+	return (NOT_SUCCESS);
 }
 
 1;
