@@ -23,45 +23,45 @@ use Status qw(:all);
 # @brief   Main entry point
 # @params  Values required project name and widget name, optional help | manual
 # @exitval Script tool gengtkwidget exit with integer value
-#			0   - success operation
-#			127 - run as root user
-#			128 - failed to:
-#					load configuration from file or
-#					load template files or
-#					missing argument(s)
+#            0   - success operation
+#            127 - run as root user
+#            128 - failed to:
+#                    load configuration from file or
+#                    load template files or
+#                    missing argument(s)
 #
 my (%option, $projectName, $widgetName, $help, $man);
 
 if(@ARGV > 0) {
-	GetOptions(
-		'pname=s' => \$projectName, 'wname=s' => \$widgetName,
-		'help|?'  => \$help, 'manual'  => \$man
-	) || pod2usage(2);
+    GetOptions(
+        'pname=s' => \$projectName, 'wname=s' => \$widgetName,
+        'help|?'  => \$help, 'manual'  => \$man
+    ) || pod2usage(2);
 }
 
 my $username = (getpwuid($>));
 my $uid = ($<);
 
 if(($username eq "root") && ($uid == 0)) {
-	if(def($help)) {
-		pod2usage(1);
-	} elsif(def($man)) {
-		pod2usage(VERBOSE => 2);
-	} else {
-		my %status = (
-			projectName => def($projectName), widgetName => def($widgetName)
-		);
-		if(check_status(\%status)) {
-			$option{PROJECT_NAME} = $projectName;
-			$option{WIDGET_NAME} = $widgetName;
-			if(gen_gtk_widget(\%option)) {
-				exit(0);
-			}
-			exit(128);
-		} else {
-			pod2usage(1);
-		}
-	}
+    if(def($help)) {
+        pod2usage(1);
+    } elsif(def($man)) {
+        pod2usage(VERBOSE => 2);
+    } else {
+        my %status = (
+            projectName => def($projectName), widgetName => def($widgetName)
+        );
+        if(check_status(\%status)) {
+            $option{PROJECT_NAME} = $projectName;
+            $option{WIDGET_NAME} = $widgetName;
+            if(gen_gtk_widget(\%option)) {
+                exit(0);
+            }
+            exit(128);
+        } else {
+            pod2usage(1);
+        }
+    }
 }
 exit(127);
 
@@ -77,28 +77,28 @@ gengtkwidget - Generate GTK widget module source files
 
 Use:
 
-	gengtkwidget [options]
+    gengtkwidget [options]
 
-	[options] pname wname help manual
+    [options] pname wname help manual
 
 Examples:
 
-	# Generate GTK widget module source files example
-	gengtkwidget --pname MyProject --wname MyWidget
+    # Generate GTK widget module source files example
+    gengtkwidget --pname MyProject --wname MyWidget
 
-	# Print this option
-	gengtkwidget --help
+    # Print this option
+    gengtkwidget --help
 
-	# Print code of tool
-	gengtkwidget --manual
+    # Print code of tool
+    gengtkwidget --manual
 
-	# Return values
-	0   - success operation 
-	127 - run as root user
-	128 - failed to:
-			load configuration from file or
-			load template files or
-			missing argument(s)
+    # Return values
+    0   - success operation 
+    127 - run as root user
+    128 - failed to:
+            load configuration from file or
+            load template files or
+            missing argument(s)
 
 =head1 DESCRIPTION
 
@@ -112,27 +112,27 @@ gengtkwidget takes the following arguments:
 
 =item pname
 
-	pname
+    pname
 
-	(Required.) Project name (destination of GTK module)
+    (Required.) Project name (destination of GTK module)
 
 =item wname
 
-	wname
+    wname
 
-	(Required.) Widget name
+    (Required.) Widget name
 
 =item help
 
-	help
+    help
 
-	(Optional.) Show help info information
+    (Optional.) Show help info information
 
 =item manual
 
-	manual
+    manual
 
-	(Optional.) Display manual
+    (Optional.) Display manual
 
 =back
 
@@ -142,7 +142,7 @@ Vladimir Roncevic, E<lt>elektron.ronca@gmail.comE<gt>.
 
 =head1 COPYRIGHT
 
-	Free software to use 2016.
+    Free software to use 2016.
 
 =head1 DATE
 

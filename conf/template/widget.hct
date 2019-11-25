@@ -36,10 +36,10 @@
 
 G_BEGIN_DECLS
 
-#define [% WNUC %]_TYPE              (gtk_[% WNLC %]_get_type())
-#define [% WNUC %](obj)              (G_TYPE_CHECK_INSTANCE_CAST((obj), [% WNUC %]_TYPE, [% WN %]))
-#define [% WNUC %]_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST((klass), [% WNUC %]_TYPE, [% WN %]Class))
-#define IS_[% WNUC %](obj)           (G_TYPE_CHECK_INSTANCE_TYPE((obj), [% WNUC %]_TYPE))
+#define [% WNUC %]_TYPE			  (gtk_[% WNLC %]_get_type())
+#define [% WNUC %](obj)			  (G_TYPE_CHECK_INSTANCE_CAST((obj), [% WNUC %]_TYPE, [% WN %]))
+#define [% WNUC %]_CLASS(klass)	  (G_TYPE_CHECK_CLASS_CAST((klass), [% WNUC %]_TYPE, [% WN %]Class))
+#define IS_[% WNUC %](obj)		   (G_TYPE_CHECK_INSTANCE_TYPE((obj), [% WNUC %]_TYPE))
 #define IS_[% WNUC %]_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE((klass), [% WNUC %]_TYPE))
 
 typedef struct _[% WN %] [% WN %];
