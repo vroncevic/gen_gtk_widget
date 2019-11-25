@@ -42,81 +42,81 @@ use Status qw(:all);
 # ...
 #
 # if(gen_gtk_widget(\%option)) {
-#	# true
-#	# notify admin | user
+#    # true
+#    # notify admin | user
 # } else {
-#	# false
-#	# return $NOT_SUCCESS
-#	# or
-#	# exit 128
+#    # false
+#    # return $NOT_SUCCESS
+#    # or
+#    # exit 128
 # }
 #
 sub gen_gtk_widget {
-	my %opt = %{$_[0]};
-	my $msg = "None";
-	if(%opt) {
-		$msg = "Generate GTK widget [$opt{WIDGET_NAME}]";
-		info_message($msg);
-		my ($cfg, $log, %preferences);
-		$cfg = dirname(dirname(abs_path(__FILE__))) . "/conf/gengtkwidget.cfg";
-		$log = dirname(dirname(abs_path(__FILE__))) . "/log/gengtkwidget.log";
-		if(read_preference($cfg, \%preferences)) {
-			my ($CCT, $HCT);
-			$CCT = dirname(dirname(abs_path(__FILE__))) . "$preferences{CCT}";
-			$HCT = dirname(dirname(abs_path(__FILE__))) . "$preferences{HCT}";
-			$msg = "Setup template files:\nCCT: $CCT\n HCT: $HCT";
-			info_debug_message($msg);
-			if((-e "$CCT") && (-e "$HCT")) {
-				my (%templateParams, $ucwn, $lcwn, $year);
-				$ucwn = uc($opt{WIDGET_NAME});
-				$lcwn = lc($opt{WIDGET_NAME});
-				$year = strftime("%Y", localtime());
-				%templateParams = (
-					PN => $opt{PROJECT_NAME}, WN => $opt{WIDGET_NAME},
-					WNUC => $ucwn, WNLC => $lcwn, YR => $year,
-					AN => $preferences{AUTHOR_NAME},
-					AE => $preferences{AUTHOR_EMAIL}
-				);
-				my ($templateGen, $cct, $cfh, $hct, $hfh);
-				$templateGen = Template->new(ABSOLUTE => 1);
-				$templateGen->process("$CCT", \%templateParams, \$cct) ||
-					die($templateGen->error);
-				$templateGen->process("$HCT", \%templateParams, \$hct) ||
-					die($templateGen->error);
-				$msg = "Processing widget parameters and generate text code";
-				info_debug_message($msg);
-				my ($currentDir, $uid, $gid, %log);
-				$currentDir = getcwd();
-				$uid = getpwnam("$preferences{UID}");
-				$gid = getgrnam("$preferences{GID}");
-				$msg = "Generating widget module files:\n";
-				$msg .= "\t$currentDir/$lcwn.h\n";
-				$msg .= "\t$currentDir/$lcwn.c";
-				info_message($msg);
-				open($hfh, '>', "$currentDir/$lcwn.h");
-				print($hfh "$hct");
-				close($hfh);
-				chown($uid, $gid, "$currentDir/$lcwn.h");
-				open($cfh, '>', "$currentDir/$lcwn.c");
-				print($cfh "$cct");
-				close($cfh);
-				chown($uid, $gid, "$currentDir/$lcwn.c");
-				$log{LOG_FILE_PATH} = $log;
-				$log{LOG_MESSAGE} = "Generated GTK widget [$opt{WIDGET_NAME}]";
-				logging(\%log);
-				$msg = "Done";
-				info_message($msg);
-				return (SUCCESS);
-			}
-			$msg = "Check files:\n\tCCT [$CCT]\n\tHCT [$HCT]";
-			error_message($msg);
-			return (NOT_SUCCESS);
-		}
-		return (NOT_SUCCESS);
-	}
-	$msg = "Missing argument [OPTION_STRUCTURE]";
-	error_message($msg);
-	return (NOT_SUCCESS);
+    my %opt = %{$_[0]};
+    my $msg = "None";
+    if(%opt) {
+        $msg = "Generate GTK widget [$opt{WIDGET_NAME}]";
+        info_message($msg);
+        my ($cfg, $log, %preferences);
+        $cfg = dirname(dirname(abs_path(__FILE__))) . "/conf/gengtkwidget.cfg";
+        $log = dirname(dirname(abs_path(__FILE__))) . "/log/gengtkwidget.log";
+        if(read_preference($cfg, \%preferences)) {
+            my ($CCT, $HCT);
+            $CCT = dirname(dirname(abs_path(__FILE__))) . "$preferences{CCT}";
+            $HCT = dirname(dirname(abs_path(__FILE__))) . "$preferences{HCT}";
+            $msg = "Setup template files:\nCCT: $CCT\n HCT: $HCT";
+            info_debug_message($msg);
+            if((-e "$CCT") && (-e "$HCT")) {
+                my (%templateParams, $ucwn, $lcwn, $year);
+                $ucwn = uc($opt{WIDGET_NAME});
+                $lcwn = lc($opt{WIDGET_NAME});
+                $year = strftime("%Y", localtime());
+                %templateParams = (
+                    PN => $opt{PROJECT_NAME}, WN => $opt{WIDGET_NAME},
+                    WNUC => $ucwn, WNLC => $lcwn, YR => $year,
+                    AN => $preferences{AUTHOR_NAME},
+                    AE => $preferences{AUTHOR_EMAIL}
+                );
+                my ($templateGen, $cct, $cfh, $hct, $hfh);
+                $templateGen = Template->new(ABSOLUTE => 1);
+                $templateGen->process("$CCT", \%templateParams, \$cct) ||
+                    die($templateGen->error);
+                $templateGen->process("$HCT", \%templateParams, \$hct) ||
+                    die($templateGen->error);
+                $msg = "Processing widget parameters and generate text code";
+                info_debug_message($msg);
+                my ($currentDir, $uid, $gid, %log);
+                $currentDir = getcwd();
+                $uid = getpwnam("$preferences{UID}");
+                $gid = getgrnam("$preferences{GID}");
+                $msg = "Generating widget module files:\n";
+                $msg .= "\t$currentDir/$lcwn.h\n";
+                $msg .= "\t$currentDir/$lcwn.c";
+                info_message($msg);
+                open($hfh, '>', "$currentDir/$lcwn.h");
+                print($hfh "$hct");
+                close($hfh);
+                chown($uid, $gid, "$currentDir/$lcwn.h");
+                open($cfh, '>', "$currentDir/$lcwn.c");
+                print($cfh "$cct");
+                close($cfh);
+                chown($uid, $gid, "$currentDir/$lcwn.c");
+                $log{LOG_FILE_PATH} = $log;
+                $log{LOG_MESSAGE} = "Generated GTK widget [$opt{WIDGET_NAME}]";
+                logging(\%log);
+                $msg = "Done";
+                info_message($msg);
+                return (SUCCESS);
+            }
+            $msg = "Check files:\n\tCCT [$CCT]\n\tHCT [$HCT]";
+            error_message($msg);
+            return (NOT_SUCCESS);
+        }
+        return (NOT_SUCCESS);
+    }
+    $msg = "Missing argument [OPTION_STRUCTURE]";
+    error_message($msg);
+    return (NOT_SUCCESS);
 }
 
 1;
@@ -128,19 +128,19 @@ GenGTKWidget - This module is for generating GTK widget module source files.
 
 =head1 SYNOPSIS
 
-	use GenGTKWidget qw(gen_gtk_widget);
+    use GenGTKWidget qw(gen_gtk_widget);
 
-	...
+    ...
 
-	if(gen_gtk_widget(\%option)) {
-		# true
-		# notify admin | user
-	} else {
-		# false
-		# return $NOT_SUCCESS
-		# or
-		# exit 128
-	}
+    if(gen_gtk_widget(\%option)) {
+        # true
+        # notify admin | user
+    } else {
+        # false
+        # return $NOT_SUCCESS
+        # or
+        # exit 128
+    }
 
 =head1 DESCRIPTION 
 
